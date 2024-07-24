@@ -10,7 +10,7 @@ export class JWTadapter {
     return jwt.sign(payload, SECRET, { expiresIn: '24h' });
   }
 
-  static validateJWT(token: string): JwtPayload | string | null {
+  static validateJWT(token: string): any {
     try {
       return jwt.verify(token, SECRET);
     } catch (error) {

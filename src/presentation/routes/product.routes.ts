@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ProductControllers } from "../controllers/product.controllers";
+import { validateAdminAuth } from "../midlewares";
 
 export class ProductRoutes {
   static get routes(): Router {
@@ -7,8 +8,8 @@ export class ProductRoutes {
 
     //definir las rutas de auth
 
-    router.post("/create", ProductControllers.createProduct);
-    router.patch("/edit", ProductControllers.editProduct);
+    router.post("/create", validateAdminAuth,ProductControllers.createProduct);
+    router.patch("/edit",validateAdminAuth, ProductControllers.editProduct);
     router.get("/list", ProductControllers.productList);
 
     return router;
