@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AuthRoutes,ProductRoutes } from "./routes/";
+import { AuthRoutes,ProductRoutes,MercadoPagoRoutes } from "./routes/";
 
 
 export class AppRoutes{
@@ -10,7 +10,9 @@ export class AppRoutes{
         //aca van todas las rutas
         router.use("/auth",AuthRoutes.routes)
         router.use("/product",ProductRoutes.routes)
+        router.use("/payment-mercadopago",MercadoPagoRoutes.routes)
 
+       
 
         return router
 

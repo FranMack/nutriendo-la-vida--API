@@ -3,6 +3,8 @@ import morgan from "morgan";
 import { Router } from "express";
 import cors from "cors"
 import bodyParser = require("body-parser");
+import { envs } from "../config";
+
 
 interface ServerOptions{
     port:number;
@@ -23,11 +25,12 @@ export class Server{
     async start(){
         //midlewares
 
-       /* this.app.use(
+    this.app.use(
         cors({
-            origin: `${envs.FRONT_URL}`, // URL del frontend
-              credentials: true, // Habilita el envio de cookies
-        this.  );*/
+          origin: `${envs.FRONT_URL}`, // URL del frontend
+          credentials: true, // Habilita el envio de cookies
+        })
+      );
           
           this.app.use(morgan("tiny"));
           this.app.use(express.json());
