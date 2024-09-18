@@ -1,16 +1,26 @@
-import { nlvLogo,facebookLogo,instagramLogo,linkedingLogo } from "./encodedImages"
+import {
+  facebookLogo,
+  instagramLogo,
+  linkedingLogo,
+  nlvLogo,
+} from "./encodedImages";
 
-interface MailTemplate{
-name:string,
-title:string,
-content:string,
-link:string,
-plans:string[]
-
+interface MailTemplate {
+  name: string;
+  title: string;
+  content: string;
+  link: string;
+  plans: string[];
 }
-  
-  export function MailTemplate({name,title,plans,content,link}:MailTemplate) {
-    return `
+
+export function MailTemplate({
+  name,
+  title,
+  plans,
+  content,
+  link,
+}: MailTemplate) {
+  return `
      <!DOCTYPE html>
   <html>
   <head>
@@ -129,8 +139,8 @@ plans:string[]
           <div class="text-container">
               <p>Hola ${name},</p>
               <h2>${title}</h2>
-              ${plans.map((item)=>{
-                return(`<li>${item}</li>`)
+              ${plans.map((item) => {
+                return `<li>${item}</li>`;
               })}
               <p>${content}</p>
           </div>
@@ -155,23 +165,15 @@ plans:string[]
                       <td class="right-img">
                           <img src="${instagramLogo}" alt="logo" class="footer-img" style="margin-right: 60px; height: 30px;" />
                           <img src="${facebookLogo}" alt="logo" class="footer-img" style="margin-right: 60px; height: 30px;" />
-                    <img src="${linkedingLogo}" alt="logo" class="footer-img" style="margin-right: 60px; height: 30px;" />
-                          </tr>
+                          <img src="${linkedingLogo}" alt="logo" class="footer-img" style="margin-right: 60px; height: 30px;" />
+                      </td>
+                    </tr>
               </table>
-
-           
-
               <div class="bottom-container">
                   <p>© 2024 Nutriendo la vida. Todos los derechos reservados</p>
               </div>
           </div>
       </div>
   </body>
-  </html>
-  
-  
-      `;
-  }
-  
-
-  
+  </html>`;
+}
