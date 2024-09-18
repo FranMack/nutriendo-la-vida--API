@@ -27,7 +27,6 @@ function validateAdminAuth(req, res, next) {
                 throw custom_errors_1.CustomError.unAuthorized("Unauthorized");
             }
             const user = jwt_adapter_1.JWTadapter.validateJWT(token);
-            console.log("xxxxxxxxxxxxxxxxxxxxxx", user);
             if (!user) {
                 throw custom_errors_1.CustomError.unAuthorized("Unauthorized");
             }

@@ -9,6 +9,7 @@ class AppRoutes {
         //aca van todas las rutas
         router.use("/auth", routes_1.AuthRoutes.routes);
         router.use("/product", routes_1.ProductRoutes.routes);
+        router.use("/payment-mercadopago", routes_1.MercadoPagoRoutes.routes);
         return router;
     }
 }

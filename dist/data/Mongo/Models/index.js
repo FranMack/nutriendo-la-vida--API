@@ -14,6 +14,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./auth.routes"), exports);
-__exportStar(require("./product.routes"), exports);
-__exportStar(require("./mercadoPago.routes"), exports);
+__exportStar(require("./user.models"), exports);
+__exportStar(require("./buyersHistory"), exports);
+__exportStar(require("./temporaryTransaction"), exports);

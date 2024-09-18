@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
+const cors_1 = __importDefault(require("cors"));
 const bodyParser = require("body-parser");
+const config_1 = require("../config");
 class Server {
     constructor({ port, routes }) {
         this.app = (0, express_1.default)();
@@ -25,11 +27,10 @@ class Server {
     start() {
         return __awaiter(this, void 0, void 0, function* () {
             //midlewares
-            /* this.app.use(
-             cors({
-                 origin: `${envs.FRONT_URL}`, // URL del frontend
-                   credentials: true, // Habilita el envio de cookies
-             this.  );*/
+            this.app.use((0, cors_1.default)({
+                origin: `${config_1.envs.FRONT_URL}`, // URL del frontend
+                credentials: true, // Habilita el envio de cookies
+            }));
             this.app.use((0, morgan_1.default)("tiny"));
             this.app.use(express_1.default.json());
             this.app.use(bodyParser.urlencoded({ extended: false }));
