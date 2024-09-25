@@ -5,17 +5,18 @@ export interface SendMailOptions {
   to: string | string[];
   subject: string;
   htmlBody: string;
-  attachements?: Attachement[];
+  attachments ?: Attachement[];
 }
 
 export interface Attachement {
   filename: string;
   path: string;
+  contentType:string
 }
 
 export class EmailService {
   static async sendEmail(options: SendMailOptions): Promise<boolean> {
-    const { to, subject, htmlBody, attachements = [] } = options;
+    const { to, subject, htmlBody, attachments : attachments  = [] } = options;
 
     const transporter: Transporter = nodemailer.createTransport({
       service: envs.MAILER_SERVICE,
@@ -31,7 +32,7 @@ export class EmailService {
         to: to,
         subject: subject,
         html: htmlBody,
-        attachments: attachements,
+        attachments : attachments ,
       });
 
       return true;
