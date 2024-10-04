@@ -41,6 +41,10 @@ const temporaryTransactionSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      consult:{
+        type:Boolean,
+        default: false,
+    },
       currency: {
         type: String,
         required: true,

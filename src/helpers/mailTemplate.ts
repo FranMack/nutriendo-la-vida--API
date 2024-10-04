@@ -152,6 +152,8 @@ export function MailTemplate({
           .mail-container {
               width: 100%;
           }
+
+          
               
           }
 

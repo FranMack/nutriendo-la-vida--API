@@ -15,6 +15,10 @@ const salesHistorySchema= new mongoose.Schema({
         type:Number,
         required:[true, "Price is required"]
     },
+    consult:{
+      type:Boolean,
+      default: false,
+  },
     date: {
         type: Date,
         default: Date.now,

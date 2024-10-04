@@ -21,6 +21,7 @@ interface ItemInfo {
   unit_price: number;
   currency: string;
   id: string;
+  consult?:boolean
 }
 
 export class MercadoPagoServices {
@@ -102,6 +103,7 @@ export class MercadoPagoServices {
               payment_id: payment_id,
               product: item.title,
               price: item.unit_price,
+              consult:item.consult,
               buyerId: buyerId,
             })
           );
@@ -111,7 +113,12 @@ export class MercadoPagoServices {
           const title = `Tu compra ha sido realizada con exito`;
           const shopingCartItems = temporaryTransaction.itemsInfo.map(
             (item) => {
-              return item.title;
+              if(item.consult){
+                return `${item.title} (+ Consulta)`
+              }
+              else{
+                return item.title
+              }
             }
           );
 
@@ -132,19 +139,19 @@ export class MercadoPagoServices {
           const linksForm = [
             {
               title: "Cómo crear buenos hábitos alimenticios",
-              link: "https://docs.google.com/forms/d/1iSE7qS2uglarApfGSZSs-N3feQet_NX-_uXDmXMddPE/viewform?edit_requested=true",
-            },
-            {
-              title: "Alimentación en pre y post menopausia",
-              link: "https://docs.google.com/forms/d/18cS6OZpbyUjlrRcPfGlfmIBNTUxAqlaLHhQtZdk7dtY/viewform?edit_requested=true",
-            },
-            {
-              title: "Baja de peso sin culpa ni restricciones",
               link: "https://docs.google.com/forms/d/1MlSBFpvfIPPfDjhLi_3HmEmXLhojfaUkiQ6_x6pyV-0/viewform?edit_requested=true",
             },
             {
-              title: "Alimentación y rendimiento deportivo",
+              title: "Alimentación en pre y post menopausia",
               link: "https://docs.google.com/forms/d/1MuTFqftB6QF63TDeeTQEszraHbt1-EX0lwXLRyIUKMQ/viewform?edit_requested=true",
+            },
+            {
+              title: "Baja de peso sin culpa ni restricciones",
+              link: "https://docs.google.com/forms/d/1iSE7qS2uglarApfGSZSs-N3feQet_NX-_uXDmXMddPE/viewform?edit_requested=true",
+            },
+            {
+              title: "Alimentación y rendimiento deportivo",
+              link: "https://docs.google.com/forms/d/18cS6OZpbyUjlrRcPfGlfmIBNTUxAqlaLHhQtZdk7dtY/viewform?edit_requested=true",
             },
           ];
 
@@ -175,6 +182,7 @@ export class MercadoPagoServices {
             "Valoro mucho tu confianza en mí y estoy encantada de que me hayas elegido para comenzar tu cambio.",
             "Luego de que tu formulario esté completo, trabajaré en tu plan alimentario para que esté adaptado 100% a vos.",
             "En las proximas 48hs recivirás tu plan nutricional personalizado.",
+            "En caso de que tambien hayas solicitado una consulta profesional, me estaré comunicando contigo en la brevedad para coordinar la cita.",
             "Si tienes alguna pregunta o necesitas información sobre tu plan, no dudes en contactarme.",
             "Estoy aquí para ayudarte.",
           ];
@@ -201,6 +209,8 @@ export class MercadoPagoServices {
             email,
             phone,
           });
+
+          const mailSubject= sendForm ? "Plan nutricional" :"Ebook: Preparate 1 día y come toda la semana"
 
           const sendEmailPromises = [
             await EmailService.sendEmail({
