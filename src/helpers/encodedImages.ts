@@ -1,5 +1,5 @@
 export const nlvLogo =
-  "https://res.cloudinary.com/dzh4kjett/image/upload/v1726770037/full-logo_ythbyt.png";
+  "https://res.cloudinary.com/dzh4kjett/image/upload/v1728059605/full-logo-transparent_sawmr8.png";
 
 export const instagramLogo = "https://res.cloudinary.com/dzh4kjett/image/upload/v1726770036/InstagramLogo_olrxd8.png";
 
