@@ -1,12 +1,12 @@
 import MercadoPagoConfig, { Payment, Preference } from "mercadopago";
+import { v4 as uuidv4 } from "uuid";
 import { envs } from "../../config";
 import { BuyersHistorynModel } from "../../data/Mongo/Models";
 import { SalesHistorynModel } from "../../data/Mongo/Models/salesHistory";
-import { CustomError } from "../../domain/errors/custom.errors";
 import { TemporaryTransactionModel } from "../../data/Mongo/Models/temporaryTransaction";
-import { v4 as uuidv4 } from "uuid";
+import { CustomError } from "../../domain/errors/custom.errors";
+import { AdminMailTemplate, MailTemplate } from "../../helpers/mailTemplate";
 import { EmailService } from "./email.services";
-import { MailTemplate, AdminMailTemplate } from "../../helpers/mailTemplate";
 
 interface BuyerInfo {
   name: string;
@@ -21,7 +21,7 @@ interface ItemInfo {
   unit_price: number;
   currency: string;
   id: string;
-  consult?:boolean
+  consult?: boolean;
 }
 
 export class MercadoPagoServices {
@@ -103,7 +103,7 @@ export class MercadoPagoServices {
               payment_id: payment_id,
               product: item.title,
               price: item.unit_price,
-              consult:item.consult,
+              consult: item.consult,
               buyerId: buyerId,
             })
           );
@@ -113,11 +113,10 @@ export class MercadoPagoServices {
           const title = `Tu compra ha sido realizada con exito`;
           const shopingCartItems = temporaryTransaction.itemsInfo.map(
             (item) => {
-              if(item.consult){
-                return `${item.title} (+ Consulta)`
-              }
-              else{
-                return item.title
+              if (item.consult) {
+                return `${item.title} (+ Consulta)`;
+              } else {
+                return item.title;
               }
             }
           );
@@ -170,18 +169,17 @@ export class MercadoPagoServices {
             },
           ];
 
-          
           const forms = linksForm.filter((item) => {
             return shopingCartItems.some((item2) => item2.includes(item.title));
-        });
-          
+          });
+
           const ebook = sendBook ? linksEbook : [];
 
           const content1 = [
             "Quiero darte las gracias por tu reciente compra.",
             "Valoro mucho tu confianza en mí y estoy encantada de que me hayas elegido para comenzar tu cambio.",
             "Luego de que tu formulario esté completo, trabajaré en tu plan alimentario para que esté adaptado 100% a vos.",
-            "En las proximas 48hs recivirás tu plan nutricional personalizado.",
+            "En las proximas 48hs recibirás tu plan nutricional personalizado.",
             "En caso de que tambien hayas solicitado una consulta profesional, me estaré comunicando contigo en la brevedad para coordinar la cita.",
             "Si tienes alguna pregunta o necesitas información sobre tu plan, no dudes en contactarme.",
             "Estoy aquí para ayudarte.",
@@ -210,7 +208,9 @@ export class MercadoPagoServices {
             phone,
           });
 
-          const mailSubject= sendForm ? "Plan nutricional" :"Ebook: Preparate 1 día y come toda la semana"
+          const mailSubject = sendForm
+            ? "Plan nutricional"
+            : "Ebook: Preparate 1 día y come toda la semana";
 
           const sendEmailPromises = [
             await EmailService.sendEmail({
