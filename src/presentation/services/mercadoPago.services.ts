@@ -43,8 +43,8 @@ export class MercadoPagoServices {
 
           back_urls: {
             success: `${envs.FRONT_URL}`,
-            failure: `${envs.API_DOMAIN}/api/payment-mercadopago/failure`,
-            pending: `${envs.API_DOMAIN}/api/payment-mercadopago/pending`,
+            failure: `${envs.FRONT_URL}`,
+            pending: `${envs.FRONT_URL}`,
           },
           //se vence al par de dias/ dia, hay que generarlo con ngrok, hasta que tengamos el dominio
           notification_url: `${envs.API_DOMAIN}/api/payment-mercadopago/webhook/?buyer_email=${buyerInfo.email}&buyer_name=${buyerInfo.name}&buyer_lastname=${buyerInfo.lastname}&buyer_phone=${buyerInfo.phone}&preference_id=${customPreferenceId}`,
