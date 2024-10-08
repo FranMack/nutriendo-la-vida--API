@@ -90,6 +90,18 @@ export class MercadoPagoServices {
         const buyerInfo = temporaryTransaction.buyerInfo!;
         const itemsInfo = temporaryTransaction.itemsInfo!;
 
+
+        const existingTransaction = await SalesHistorynModel.findOne({
+          payment_id,
+        });
+
+        if (existingTransaction) {
+          console.log("Payment already processed. Skipping duplicate handling.");
+          return; // Evita procesar el pago y enviar el correo de nuevo.
+        }
+
+
+
         if (status === "approved") {
           let buyer = await BuyersHistorynModel.findOne({ email: email });
 
@@ -219,7 +231,7 @@ export class MercadoPagoServices {
               htmlBody,
             }),
             await EmailService.sendEmail({
-              to: "nutriendolavida.app@gmail.com",
+              to: `${envs.MAILER_EMAIL}`,
               subject: "Nueva venta",
               htmlBody: htmlBodyAdmin,
             }),
