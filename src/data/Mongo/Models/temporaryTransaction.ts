@@ -8,7 +8,7 @@ const temporaryTransactionSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: 3600, // Documento será eliminado después de 1 hora (3600 segundos)
+    expires: 604800, // Documento será eliminado después de 1 semana 
   },
   buyerInfo: {
     name: {
