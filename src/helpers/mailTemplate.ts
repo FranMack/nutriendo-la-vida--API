@@ -1,9 +1,4 @@
-import {
-  facebookLogo,
-  instagramLogo,
-  linkedingLogo,
-  nlvLogo,
-} from "./encodedImages";
+import { instagramLogo, linkedingLogo, nlvLogo } from "./encodedImages";
 
 interface LinkOptions {
   title: string;
@@ -17,6 +12,7 @@ interface MailTemplate {
   plans: string[];
   links: LinkOptions[];
   ebookLinks: LinkOptions[];
+  detoxChallenge: LinkOptions | null;
 }
 
 interface AdminMail {
@@ -40,6 +36,7 @@ export function MailTemplate({
   content,
   links,
   ebookLinks,
+  detoxChallenge,
 }: MailTemplate) {
   return `
      <!DOCTYPE html>
@@ -179,9 +176,6 @@ export function MailTemplate({
                 .join("")}
           </div>
 
-
-
-
               ${
                 links.length > 0
                   ? ` <div class="text-container">
@@ -221,6 +215,26 @@ export function MailTemplate({
                })
                .join("")
            }
+
+
+
+
+               ${
+                 !!detoxChallenge
+                   ? ` <div class="text-container">
+                <p><strong>Descarga tu Plan Detox:</strong></p>
+           
+          </div>`
+                   : ""
+               }
+
+           ${
+             !!detoxChallenge &&
+             ` <div class="button-container">
+              <a href="${detoxChallenge.link}" target="_blank" class="button"> ${detoxChallenge.title}</a>
+          </div>`
+           }
+
 
          
               <div class="text-container">
@@ -401,10 +415,7 @@ export function AdminMailTemplate({
 
 
 
-
-
             
-
          <div class="mailer-footer">
             <table>
                   <tr>

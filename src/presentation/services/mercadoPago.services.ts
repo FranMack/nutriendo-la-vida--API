@@ -90,17 +90,16 @@ export class MercadoPagoServices {
         const buyerInfo = temporaryTransaction.buyerInfo!;
         const itemsInfo = temporaryTransaction.itemsInfo!;
 
-
         const existingTransaction = await SalesHistorynModel.findOne({
           payment_id,
         });
 
         if (existingTransaction) {
-          console.log("Payment already processed. Skipping duplicate handling.");
+          console.log(
+            "Payment already processed. Skipping duplicate handling."
+          );
           return; // Evita procesar el pago y enviar el correo de nuevo.
         }
-
-
 
         if (status === "approved") {
           let buyer = await BuyersHistorynModel.findOne({ email: email });
@@ -140,10 +139,16 @@ export class MercadoPagoServices {
             : false;
 
           const sendForm = shopingCartItems.find((item) => {
-            if (!item.includes("Ebook")) {
+            if (!item.includes("Ebook") && !item.includes("Desafío")) {
               return item;
             }
           })?.length
+            ? true
+            : false;
+
+          const sendDetoxChallengePlan = shopingCartItems.includes(
+            "Desafío Detox"
+          )
             ? true
             : false;
 
@@ -181,28 +186,62 @@ export class MercadoPagoServices {
             },
           ];
 
+          const linksDetoxChallenge = {
+            title: "Desafío Detox",
+            link: "https://drive.google.com/uc?export=download&id=1fm1hBY7SenzO_40ejv-WDJpUG_lIOo78",
+          };
+
           const forms = linksForm.filter((item) => {
             return shopingCartItems.some((item2) => item2.includes(item.title));
           });
 
           const ebook = sendBook ? linksEbook : [];
 
-          const content1 = [
+          const contentPersonalPlan = [
             "Quiero darte las gracias por tu reciente compra.",
             "Valoro mucho tu confianza en mí y estoy encantada de que me hayas elegido para comenzar tu cambio.",
             "Luego de que tu formulario esté completo, trabajaré en tu plan alimentario para que esté adaptado 100% a vos.",
             "En las proximas 48hs recibirás tu plan nutricional personalizado.",
             "En caso de que tambien hayas solicitado una consulta profesional, me estaré comunicando contigo en la brevedad para coordinar la cita.",
+            sendBook ? "En el ebook encontrarás una planificación semanal de comidas, con su lista de compras y como organizarte para poder lograrlo de una manera fácil y sencilla.":"" ,
+            "Si tienes alguna pregunta o necesitas información sobre tu plan, no dudes en contactarme.",
+            sendDetoxChallengePlan ? "Adjunto encontrarás tu Plan Detox de 10 Días, diseñado para ayudarte a eliminar toxinas, recargar energía y sentirte increíble.":"" ,
             "Si tienes alguna pregunta o necesitas información sobre tu plan, no dudes en contactarme.",
             "Estoy aquí para ayudarte.",
-          ];
+          ].filter((item)=>{if(item){return item}})
 
-          const content2 = [
+          const contentEbook = [
             "Quiero darte las gracias por tu reciente compra. Valoro mucho tu confianza en mí y estoy encantada de que me hayas elegido para comenzar tu cambio.",
             "En el ebook encontrarás una planificación semanal de comidas, con su lista de compras y como organizarte para poder lograrlo de una manera fácil y sencilla.",
           ];
 
-          const content = sendForm ? content1 : content2;
+          const contentDetox = [
+            "¡Gracias por confiar en mí y felicitaciones por dar el primer paso hacia una mejor versión de ti!",
+            "Adjunto encontrarás tu Plan Detox de 10 Días, diseñado para ayudarte a eliminar toxinas, recargar energía y sentirte increíble.",
+            "Que encontrarás en tu plan?",
+            "Menús diarios balanceados y deliciosos",
+            "Recetas fáciles de preparar con ingredientes frescos",
+            "Consejos claves para maximizar los resultados",
+            "Una guía completa para mantenerte motivada y disfrutar del proceso",
+            "Antes de comenzar:",
+            "Revisa el plan completo y haz tu lista de compras",
+            "Prepara tu cocina con los ingredientes recomendados",
+            "Si tienes preguntas estoy aquí para ayudarte",
+            "Compromiso: La Clave del Éxito",
+            "Este desafío no es solo una dieta, ¡es un compromiso contigo misma! Mantenerte enfocada durante los 10 días marcará la diferencia en cómo te sentirás al final. Aunque puedan surgir tentaciones, recuerda que cada pequeño esfuerzo cuenta y cada día es una oportunidad para sentirte mejor.",
+            "Lista para iniciar?",
+            "El día ideal para comenzar es un Lunes de enero. Recuerda que el compromiso contigo misma es la clave del éxito.",
+            sendBook ? "En el ebook encontrarás una planificación semanal de comidas, con su lista de compras y como organizarte para poder lograrlo de una manera fácil y sencilla.":"" ,
+            "Si tienes dudas o necesitas apoyo en cualquier momento, no dudes en escribirme.",
+            "Estoy emocionada de acompañarte en este desafío y ver tus increíbles resultados.",
+            
+          ].filter((item)=>{if(item){return item}})
+
+          const content = sendForm
+            ? contentPersonalPlan
+            : sendDetoxChallengePlan
+            ? contentDetox
+            : contentEbook;
 
           const htmlBody = MailTemplate({
             name: name,
@@ -211,6 +250,7 @@ export class MercadoPagoServices {
             content,
             links: forms,
             ebookLinks: ebook,
+            detoxChallenge: sendDetoxChallengePlan ? linksDetoxChallenge : null,
           });
           const htmlBodyAdmin = AdminMailTemplate({
             name,
